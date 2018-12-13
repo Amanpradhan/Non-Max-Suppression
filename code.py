@@ -47,118 +47,45 @@ def non_max_suppression_slow(boxes, overlapThresh):
 		idxs = np.delete(idxs, suppress)	
 	return boxes[pick]		
 
+l_rec = np.array([0, 0, 0, 0])
+l_cir = np.array([ 0, 0, 0, 0])
 
+def draw(zone_limit_x1, zone_limit_y1, zone_limit_x2, zone_limit_y2):
+	# top left
+	global l_cir, l_rec
+	
+	for _ in range(20):
+		x1 = random.randint(zone_limit_x1, zone_limit_x2)
+		y1 = random.randint(zone_limit_y1, zone_limit_y2)
+		r = random.randint(16, 320)
+		cv2.circle(img, (x1, y1), r, (255, 0, 0), 0)
+		b = np.array([x1 - r, y1 - r, x1 + r, y1 + r])
+		l_cir = np.vstack((l_cir, b))
 
+		x2 = random.randint(zone_limit_x1, zone_limit_x2)
+		y2 = random.randint(zone_limit_y1, zone_limit_y2)
+		per_x = random.randint(16, 320)
+		per_y = random.randint(16, 320)
+		cv2.rectangle(img, (x2, y2), (x2+per_x, y2+per_y), (0, 255, 0), 2)
+		b = np.array([x2, y2, x2+per_x, y2+per_y])
+		l_rec = np.vstack((l_rec, b))
 
-zone_limit_x1 = 0
-zone_limit_y1 = 0
-zone_limit_x2 = 400
-zone_limit_y2 = 400
-
-x2 = random.randint(zone_limit_x1, zone_limit_x2)
-y2 = random.randint(zone_limit_y1, zone_limit_y2)
-per_x = random.randint(16,320)
-per_y = random.randint(16,320)
-l_rec = np.array([x2, y2, x2+per_x, y2+per_y])
-
-x1 = random.randint(zone_limit_x1, zone_limit_x2)
-y1 = random.randint(zone_limit_y1, zone_limit_y2)
-per_x = random.randint(16,320)
-per_y = random.randint(16,320)
-r = random.randint(16,320)
-l_cir = np.array([x1 - r, y1 - r, x1 + r, y1 + r])
-
-# top left	
-for i in range(20):
-	zone_limit_x1 = 0
-	zone_limit_y1 = 0
-	zone_limit_x2 = 400
-	zone_limit_y2 = 400
-	x1 = random.randint(zone_limit_x1, zone_limit_x2)
-	y1 = random.randint(zone_limit_y1, zone_limit_y2)
-	r = random.randint(16,320)
-	cv2.circle(img, (x1, y1), r,(255,0,0), 0)
-	b = np.array([x1 - r, y1 - r, x1 + r, y1 + r])
-	l_cir = np.vstack((l_cir, b))
-
-	x2 = random.randint(zone_limit_x1, zone_limit_x2)
-	y2 = random.randint(zone_limit_y1, zone_limit_y2)
-	per_x = random.randint(16,320)
-	per_y = random.randint(16,320)
-	cv2.rectangle(img,(x2,y2), (x2+per_x, y2+per_y),(0, 255, 0), 2)
-	b = np.array([x2, y2, x2+per_x, y2+per_y])
-	l_rec = np.vstack((l_rec, b))
-
-# top right
-for i in range(20):
-	zone_limit_x1 = 401
-	zone_limit_y1 = 0
-	zone_limit_x2 = 800
-	zone_limit_y2 = 400
-	x1 = random.randint(zone_limit_x1, zone_limit_x2)
-	y1 = random.randint(zone_limit_y1, zone_limit_y2)
-	r = random.randint(16,320)
-	cv2.circle(img, (x1, y1), r,(255,0,0), 0)
-	b = np.array([x1 - r, y1 - r, x1 + r, y1 + r])
-	l_cir = np.vstack((l_cir, b))
-
-	x2 = random.randint(zone_limit_x1, zone_limit_x2)
-	y2 = random.randint(zone_limit_y1, zone_limit_y2)
-	per_x = random.randint(16,320)
-	per_y = random.randint(16,320)
-	cv2.rectangle(img,(x2,y2), (x2+per_x, y2+per_y),(0, 255, 0), 2)
-	b = np.array([x2, y2, x2+per_x, y2+per_y])
-	l_rec = np.vstack((l_rec, b))
-
-# bottom left
-for i in range(20):
-	zone_limit_x1 = 0
-	zone_limit_y1 = 401
-	zone_limit_x2 = 400
-	zone_limit_y2 = 800
-	x1 = random.randint(zone_limit_x1, zone_limit_x2)
-	y1 = random.randint(zone_limit_y1, zone_limit_y2)
-	r = random.randint(16,320)
-	cv2.circle(img, (x1, y1), r,(255,0,0), 0)
-	b = np.array([x1 - r, y1 - r, x1 + r, y1 + r])
-	l_cir = np.vstack((l_cir, b))
-
-	x2 = random.randint(zone_limit_x1, zone_limit_x2)
-	y2 = random.randint(zone_limit_y1, zone_limit_y2)
-	per_x = random.randint(16,320)
-	per_y = random.randint(16,320)
-	cv2.rectangle(img,(x2,y2), (x2+per_x, y2+per_y),(0, 255, 0), 2)
-	b = np.array([x2, y2, x2+per_x, y2+per_y])
-	l_rec = np.vstack((l_rec, b))
-
-# bottom right
-for i in range(20):
-	zone_limit_x1 = 401
-	zone_limit_y1 = 401
-	zone_limit_x2 = 800
-	zone_limit_y2 = 800
-	x1 = random.randint(zone_limit_x1, zone_limit_x2)
-	y1 = random.randint(zone_limit_y1, zone_limit_y2)
-	r = random.randint(16,320)
-	cv2.circle(img, (x1, y1), r,(255,0,0), 0)
-	b = np.array([x1 - r, y1 - r, x1 + r, y1 + r])
-	l_cir = np.vstack((l_cir, b))
-
-	x2 = random.randint(zone_limit_x1, zone_limit_x2)
-	y2 = random.randint(zone_limit_y1, zone_limit_y2)
-	per_x = random.randint(16,320)
-	per_y = random.randint(16,320)
-	cv2.rectangle(img,(x2,y2), (x2+per_x, y2+per_y),(0, 255, 0), 2)
-	b = np.array([x2, y2, x2+per_x, y2+per_y])
-	l_rec = np.vstack((l_rec, b))
-
+# top left zone
+draw(0, 0, 400, 400)
+# top right zone
+draw(401, 0, 800, 400)
+# bottom left zone
+draw(0, 401, 400, 800)
+# bottom right zone
+draw(401, 401, 800, 800)
+# centre zone
+draw(200, 200, 600, 600)
 
 
 images_rectangle = [
 	("example.png",l_rec)
-	
 	]
- 
+
 # loop over the images
 for (imagePath, boundingBoxes) in images_rectangle:
 	# load the image and clone it
@@ -166,19 +93,19 @@ for (imagePath, boundingBoxes) in images_rectangle:
 	image = cv2.imread(imagePath)
 	image = cv2.resize(image, (1000,1000))
 	orig = image.copy()
- 
+
 	# loop over the bounding boxes for each image and draw them
 	for (startX, startY, endX, endY) in boundingBoxes:
 		cv2.rectangle(orig, (startX, startY), (endX, endY), (0, 0, 255), 2)
- 
+
 	# perform non-maximum suppression on the bounding boxes
-	pick = non_max_suppression_slow(boundingBoxes, 0.3)
+	pick = non_max_suppression_slow(boundingBoxes, 0.1)
 	print("[x] after applying non-maximum, %d bounding boxes" % (len(pick)))
- 
+
 	# loop over the picked bounding boxes and draw them
 	for (startX, startY, endX, endY) in pick:
 		cv2.rectangle(image, (startX, startY), (endX, endY), (0, 255, 0), 2)
- 
+
 	
 
 images_circle = [
@@ -188,10 +115,8 @@ images_circle = [
 for (imagePath, boundingBoxes) in images_circle:
 	# load the image and clone it
 	print("[x] %d initial bounding boxes" % (len(boundingBoxes)))
-	# image = cv2.imread(imagePath)
-	# image = cv2.resize(image, (1000,1000))
 	orig = image.copy()
- 
+
 	# loop over the bounding boxes for each image and draw them
 	for (startX, startY, endX, endY) in boundingBoxes:
 		startX = int(startX)
@@ -199,22 +124,21 @@ for (imagePath, boundingBoxes) in images_circle:
 		endX = int(endX)
 		endY = int(endY)
 		cv2.rectangle(orig, (startX, startY), (endX, endY), (0, 0, 255), 2)
- 
+
 	# perform non-maximum suppression on the bounding boxes
-	pick = non_max_suppression_slow(boundingBoxes, 0.3)
+	pick = non_max_suppression_slow(boundingBoxes, 0.1)
 	print("[x] after applying non-maximum, %d bounding boxes" % (len(pick)))
- 
+
 	# loop over the picked bounding boxes and draw them
 	for (startX, startY, endX, endY) in pick:
-		# startX = int(startX)
-		# startY = int(startY)
-		# endX = int(endX)
-		# endY = int(endY)
-		# cv2.rectangle(image, (int(startX), int(startY)), (int(endX), int(endY)), (255, 255, 0), 2)
-		cv2.circle(image, (int((startX + endX) // 2), int((startY + endY) // 2)), int((endY - startY) // 2), (255,255,0), 3)
+		x = int((startX + endX) // 2)
+		y = int((startY + endY) // 2)
+		r = int((endY - startY) // 2)
+		cv2.circle(image, ( x, y), r, (255,255,0), 3)
 
+cv2.rectangle(image, (0, 0), (800, 800), (0, 255, 0), 5)
 
 cv2.imshow('frame', image)
-cv2.waitKey(0)
 cv2.imshow('frame_orig', img)
-cv2.waitKey(0) 
+cv2.waitKey(0)
+cv2.destroyAllWindows()
